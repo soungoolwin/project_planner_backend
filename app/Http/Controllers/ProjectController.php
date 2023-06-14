@@ -64,9 +64,17 @@ class ProjectController extends Controller
     {
 
 
-        $data = $request->json()->all();
+        if ($request->has('IsComplete')) {
+            $project->IsComplete = $request->input('IsComplete');
+        } else {
+            $validatedData = $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+                // Add validation rules for other project attributes
+            ]);
 
-        $project->fill($data);
+            $project->fill($validatedData);
+        }
         // Set other project attributes as needed
 
         $project->save();
